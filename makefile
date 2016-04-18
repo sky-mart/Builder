@@ -1,15 +1,28 @@
-all: bin/hello
+BINDIR = bin
+SRCDIR = src
+INCDIR = include
+OBJDIR = obj
 
-bin/hello: obj/hello.o obj/main.o
-	gcc -o bin/hello obj/main.o obj/hello.o
+vpath %.c $(SRCDIR)
+vpath %.h $(INCDIR)
+vpath %.o $(OBJDIR)
 
-obj/hello.o: src/hello.c
-	gcc -c -o obj/hello.o src/hello.c -Iinclude
+LINK_TARGET = $(BINDIR)/hello
 
-obj/main.o: src/main.c
-	gcc -c -o obj/main.o src/main.c -Iinclude
+OBJS = $(OBJDIR)/main.o \
+		$(OBJDIR)/hello.o
 
-clean:
-	rm obj/hello.o
-	rm obj/main.o
-	rm bin/hello 
+REBUILDABLES = $(OBJS) $(LINK_TARGET)
+
+clean: 
+	rm -f $(REBUILDABLES)
+
+all: $(LINK_TARGET)
+
+$(LINK_TARGET): $(OBJS)
+	gcc -o $@ $^
+
+$(OBJDIR)/%.o: %.c
+	gcc -c -o $@ $< -I$(INCDIR)
+
+main.o: hello.h
