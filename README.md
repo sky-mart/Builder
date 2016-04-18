@@ -79,7 +79,7 @@ gcc -v file.c -o prog_name
 
 5. Статические библиотеки. Компонуя программу со статической библиотекой, GCC копирует нужный код из библиотеки в итоговый исполняемый файл. Получить статическую библиотеку можно с помощью команды
 
-ar rcs libfilename.a filename.c
+ar rcs libfilename.a filename.o
 
 Принято называть библиотеки с префиксом lib, как выяснится впоследствии, это даже полезно.
 
@@ -97,3 +97,31 @@ gcc -dynamiclib -o libhello.dylib hello.c
 gcc header.h main.c -Ldir -llibname
 
 libname - это то, что находится между lib и .dylib
+
+
+7. Пути к библиотекам и заголовочным файлам. 
+
+Аргумент -Idir указывает GCC директорию, где искать заголовочные файлы.
+Аргумент -Ldir указывает GCC директорию, где искать файлы библиотек, неважно динамических или статических.
+Аргумент -llibname указывает GCC какую именно библиотеку использовать для сборки проекта.
+
+Пример структуры проекта:
+	bin/
+	include/
+		hello.h
+	lib/
+	obj/
+	src/
+		hello.c
+		main.c
+
+Для сборки проекта со статической библиотекой нужно выполнить следующие команды:
+
+gcc -c -o obj/hello.o src/hello.c
+ar rcs lib/libhello.a obj/hello.o
+gcc -o bin/hello src/main.c -Iinclude -Llib -lhello
+
+Для сборки же проекта с динамической библиотекой:
+
+gcc -dynamiclib -o bin/libhello.dylib src/hello.c
+gcc -o bin/hello src/main.c -Iinclude -Lbin -lhello
