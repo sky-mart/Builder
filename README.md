@@ -125,3 +125,11 @@ gcc -o bin/hello src/main.c -Iinclude -Llib -lhello
 
 gcc -dynamiclib -o bin/libhello.dylib src/hello.c
 gcc -o bin/hello src/main.c -Iinclude -Lbin -lhello
+
+
+8. Утилита make. Эта утилита предназначена для автоматизации процесса сборки. В файле makefile задаются правила и их пререквизиты в формате
+
+rule: pre-requisite-1 pre-requisite-2
+	command
+
+В качестве правил и пререквизитов можно использовать имена файлов. В этом случае если результат правила существует и он не старше необходимых файлов, то правило выполняться не будет.
